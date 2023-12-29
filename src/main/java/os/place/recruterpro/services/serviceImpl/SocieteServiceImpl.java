@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
+import os.place.recruterpro.Enum.CompteStatus;
 import os.place.recruterpro.Util.EmailSender;
 import os.place.recruterpro.dtos.SocieteDTO;
 import os.place.recruterpro.dtos.societe.RequestCreateSocieteDTO;
+import os.place.recruterpro.dtos.societe.RequestValidRegister;
 import os.place.recruterpro.entities.Offre;
 import os.place.recruterpro.entities.Societe;
 import os.place.recruterpro.exceptions.exception.LoginSocieteException;
@@ -29,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,7 +71,9 @@ public class SocieteServiceImpl implements SocieteService {
                 }
             }
             String Code = UUID.randomUUID().toString();
+            LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(3);
             societe.setCode(Code);
+            societe.setCodeExpiration(expirationTime);
             societe = societeRepository.save(societe);
             emailSender.sendEmail("hay.anas.336@gmail.com","code verification", Code);
             return societeMapper.toDto(societe);
@@ -81,10 +86,10 @@ public class SocieteServiceImpl implements SocieteService {
     public SocieteDTO loginSociete(SocieteDTO societeDTO) {
 
         Societe societe = societeMapper.toEntity(societeDTO);
-        Optional<Societe> societeOpt = societeRepository.findByEmail(societe.getEmail());
-        if (societeOpt.isPresent()){
-            if(BCrypt.checkpw(societe.getPassword(), societeOpt.get().getPassword())){
-                societe = societeOpt.get();
+        Societe societeOpt = societeRepository.findByEmail(societe.getEmail());
+        if (societeOpt != null){
+            if(BCrypt.checkpw(societe.getPassword(), societeOpt.getPassword())){
+                societe = societeOpt;
             }else{
                 throw  new LoginSocieteException("the password is not correct");
             }
@@ -96,12 +101,16 @@ public class SocieteServiceImpl implements SocieteService {
     }
 
     @Override
-    public Boolean verificationCode(String code) {
-        boolean result;
-        Optional<Societe> societeOpt = this.societeRepository.findByCode(code);
-        if (societeOpt.isPresent()){
-            result = true;
-        }else throw new NotExist("the societe not exist");
-        return result;
+    public Boolean verificationCode(RequestValidRegister validRegister) {
+        String email = validRegister.getEmail();
+        String verificationKey = validRegister.getVerificationKey();
+        Societe societe = societeRepository.findByEmail(email);
+        if (societe != null && societe.getCode().equals(verificationKey)
+                && LocalDateTime.now().isBefore(societe.getCodeExpiration())) {
+            societe.setStatus(CompteStatus.VALID);
+            societeRepository.save(societe); // Save after successful verification
+            return true;
+        }
+        return false;
     }
 }

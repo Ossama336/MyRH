@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import os.place.recruterpro.Enum.CompteStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -23,6 +24,7 @@ public class Societe {
     private String adresse;
     private String image;
     private String code;
+    private LocalDateTime codeExpiration;
     @Enumerated(EnumType.STRING)
     private CompteStatus status;
     @JsonManagedReference

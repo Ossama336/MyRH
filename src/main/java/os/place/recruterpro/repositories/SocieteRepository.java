@@ -6,7 +6,7 @@ import os.place.recruterpro.entities.Societe;
 import java.util.Optional;
 
 public interface SocieteRepository extends JpaRepository<Societe, Long> {
-    Optional<Societe> findByEmail(String societe);
+    Societe findByEmail(String societe);
     Optional<Societe> findByCode(String code);
 
 }

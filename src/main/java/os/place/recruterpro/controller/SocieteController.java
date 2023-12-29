@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import os.place.recruterpro.dtos.SocieteDTO;
 import os.place.recruterpro.dtos.societe.RequestCreateSocieteDTO;
+import os.place.recruterpro.dtos.societe.RequestValidRegister;
 import os.place.recruterpro.services.SocieteService;
 
 import java.io.IOException;
@@ -34,8 +35,9 @@ public class SocieteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.societeService.loginSociete(societeDTO));
     }
     @PostMapping("/validation")
-     public ResponseEntity<String> validationCompteSociete(@RequestBody String code){
-        boolean result = this.societeService.verificationCode(code);
+     public ResponseEntity<String> validationCompteSociete(@RequestBody RequestValidRegister validRegister){
+
+        boolean result = this.societeService.verificationCode(validRegister);
         if (result) {
             return ResponseEntity.status(HttpStatus.OK).body("Validation realized successfully");
         }else return ResponseEntity.status(HttpStatus.CONFLICT).body("Field validation");

@@ -19,7 +19,7 @@ public class Offre {
     private String description;
     private String profile;
     private float salaire;
-    private String profil;
+    private String ville;
 
     @Enumerated(EnumType.STRING)
     private NiveauEtude niveau_etude;

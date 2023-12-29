@@ -1,5 +1,6 @@
 package os.place.recruterpro.entities;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +27,11 @@ public class Offre {
     @Enumerated(EnumType.STRING)
     private StatusOffre status;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="offre")
     private List<Postule> postule;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "societeId")
     private Societe societe;

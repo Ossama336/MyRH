@@ -58,6 +58,18 @@ public class PostuleServiceImpl implements PostuleService {
                          e.printStackTrace();
                      }
                  }
+                 MultipartFile fileMotivation = requestPostuleOffre.getMotivation();
+                if (fileMotivation != null && !fileMotivation.isEmpty()) {
+                    try {
+                        byte[] bytes = fileMotivation.getBytes();
+                        Path path = Paths.get("src/main/resources/motivation/" + UUID.randomUUID().toString() + fileMotivation.getOriginalFilename());
+                        Files.write(path, bytes);
+                        postule.setMotivation(path.toString());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
              postule = postuleRepository.save(postule);
              return postuleMapper.toDto(postule);
         }else throw new AccessOffreException("the offre don't by accessed");

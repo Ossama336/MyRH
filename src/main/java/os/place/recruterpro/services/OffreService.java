@@ -16,5 +16,5 @@ public interface OffreService {
     OffreDTO validationOffre(RequestValidationDTO validationDTO);
     Page<Offre> listOffrePageable(Map<String, Integer> query);
 
-    List<OffreDTO> SearchOffre(RequestSearchOffreDTO requestSearchOffreDTO);
+    List<OffreDTO> searchOffre(RequestSearchOffreDTO requestSearchOffreDTO);
 }

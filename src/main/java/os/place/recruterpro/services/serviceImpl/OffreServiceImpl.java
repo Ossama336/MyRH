@@ -22,6 +22,7 @@ import os.place.recruterpro.repositories.PostuleRepository;
 import os.place.recruterpro.repositories.SocieteRepository;
 import os.place.recruterpro.services.OffreService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -67,13 +68,16 @@ public class OffreServiceImpl implements OffreService {
 
     @Override
     public OffreDTO validationOffre(RequestValidationDTO validationDTO) {
-        Optional<Offre> offreOpt = offreRepository.findById(validationDTO.getIdOffre());
-        if (offreOpt.isPresent()){
-           Offre offre = offreOpt.get();
-           offre.setStatus(StatusOffre.valueOf(validationDTO.getStatus()));
-           offreRepository.save(offre);
-           return offreMapper.toDTO(offre);
-        }else throw new AccessOffreException(" the offre is not exist");
+        String status = validationDTO.getStatus();
+        if (status.equals(String.valueOf(StatusOffre.REJECTED)) || status.equals(String.valueOf(StatusOffre.ACCEPTED))) {
+            Optional<Offre> offreOpt = offreRepository.findById(validationDTO.getIdOffre());
+            if (offreOpt.isPresent()) {
+                Offre offre = offreOpt.get();
+                offre.setStatus(StatusOffre.valueOf(validationDTO.getStatus()));
+                offreRepository.save(offre);
+                return offreMapper.toDTO(offre);
+            } else throw new AccessOffreException(" the offre is not exist");
+        }else throw new NotExist("Verify the status of validation");
     }
 
     @Override
@@ -88,7 +92,7 @@ public class OffreServiceImpl implements OffreService {
     }
 
     @Override
-    public List<OffreDTO> SearchOffre(RequestSearchOffreDTO requestSearchOffreDTO) {
+    public List<OffreDTO> searchOffre(RequestSearchOffreDTO requestSearchOffreDTO) {
         Specification<Offre> sec = Specification.where(null);
         String nvEduction = requestSearchOffreDTO.getNiveau_etude();
         String profile = requestSearchOffreDTO.getProfile();
@@ -103,8 +107,11 @@ public class OffreServiceImpl implements OffreService {
 
         sec = sec.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"), status)));
         List<Offre> listOffre = offreRepository.findAll(sec);
+        List<OffreDTO> offreDTOS = new ArrayList<>();
+        for (Offre offre : listOffre){
+            offreDTOS.add(offreMapper.toDTO(offre));
+        }
 
-        List<OffreDTO> offreDTOS = this.offreMapper.toDtoList(listOffre);
         return offreDTOS;
     }
 

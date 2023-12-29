@@ -1,5 +1,7 @@
 package os.place.recruterpro.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +25,7 @@ public class Societe {
     private String code;
     @Enumerated(EnumType.STRING)
     private CompteStatus status;
+    @JsonManagedReference
     @OneToMany(mappedBy = "societe", fetch = FetchType.LAZY )
     private List<Offre> offre;
 

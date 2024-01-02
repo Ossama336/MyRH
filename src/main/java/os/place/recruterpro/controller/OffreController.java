@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(value = "*")
 @RestController
 @RequestMapping("api/v1/offre")
 public class OffreController {
@@ -40,6 +41,12 @@ public class OffreController {
         this.offreService.validationOffre(validationDTO);
         return new ResponseEntity<>("Validation realised successfully", HttpStatus.OK);
     }
+    @GetMapping("/offers")
+    public List<OffreDTO> getOffers(){
+
+        return this.offreService.getOffres();
+
+    }
     @GetMapping("/list")
     public Page<Offre> listOffre(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size){
         Map<String, Integer> query = new HashMap<>();
@@ -47,6 +54,11 @@ public class OffreController {
         query.put("size", size);
         return this.offreService.listOffrePageable(query);
 
+    }
+    @GetMapping("/{id}")
+    public OffreDTO getOffer(@PathVariable() long id){
+        System.out.println("Hy");
+        return this.offreService.getOffre(id);
     }
     @PostMapping("/search")
     public List<OffreDTO> searchOffre(@RequestBody RequestSearchOffreDTO offreDTO){

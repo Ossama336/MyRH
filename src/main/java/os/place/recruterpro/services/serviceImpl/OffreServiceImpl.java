@@ -92,6 +92,22 @@ public class OffreServiceImpl implements OffreService {
     }
 
     @Override
+    public OffreDTO getOffre(Long id) {
+        Offre offre = this.offreRepository.findById(id).orElseThrow(()-> new NotExist("this Offer not exist"));
+        return this.offreMapper.toDTO(offre);
+    }
+
+    @Override
+    public List<OffreDTO> getOffres() {
+        List<Offre> offres = this.offreRepository.findAll();
+        List<OffreDTO> offreDTOList =new ArrayList<>();
+        for(Offre offer : offres){
+            offreDTOList.add(this.offreMapper.toDTO(offer));
+        }
+        return offreDTOList;
+    }
+
+    @Override
     public List<OffreDTO> searchOffre(RequestSearchOffreDTO requestSearchOffreDTO) {
         Specification<Offre> sec = Specification.where(null);
         String nvEduction = requestSearchOffreDTO.getNiveau_etude();

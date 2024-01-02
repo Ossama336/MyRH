@@ -15,6 +15,8 @@ public interface OffreService {
     OffreDTO storeOffre(RequestOffre requestOffre);
     OffreDTO validationOffre(RequestValidationDTO validationDTO);
     Page<Offre> listOffrePageable(Map<String, Integer> query);
+    OffreDTO getOffre(Long id);
+    List<OffreDTO >getOffres();
 
     List<OffreDTO> searchOffre(RequestSearchOffreDTO requestSearchOffreDTO);
 }

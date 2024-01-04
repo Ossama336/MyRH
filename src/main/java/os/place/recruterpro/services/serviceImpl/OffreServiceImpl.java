@@ -112,7 +112,12 @@ public class OffreServiceImpl implements OffreService {
         Specification<Offre> sec = Specification.where(null);
         String nvEduction = requestSearchOffreDTO.getNiveau_etude();
         String profile = requestSearchOffreDTO.getProfile();
+        String ville = requestSearchOffreDTO.getVille();
         String status = String.valueOf(StatusOffre.ACCEPTED);
+
+        if( profile != null || !profile.isEmpty() ){
+            sec = sec.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("ville"),ville)));
+        }
         if( profile != null || !profile.isEmpty() ){
             sec = sec.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("profile"),profile)));
         }

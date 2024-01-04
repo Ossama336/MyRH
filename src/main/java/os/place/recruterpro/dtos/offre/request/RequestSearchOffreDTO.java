@@ -7,4 +7,5 @@ import lombok.Setter;
 public class RequestSearchOffreDTO {
     private String niveau_etude;
     private String profile;
+    private String ville;
 }

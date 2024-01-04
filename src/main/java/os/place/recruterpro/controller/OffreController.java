@@ -57,10 +57,9 @@ public class OffreController {
     }
     @GetMapping("/{id}")
     public OffreDTO getOffer(@PathVariable() long id){
-        System.out.println("Hy");
         return this.offreService.getOffre(id);
     }
-    @PostMapping("/search")
+        @PostMapping("/search")
     public List<OffreDTO> searchOffre(@RequestBody RequestSearchOffreDTO offreDTO){
         return this.offreService.searchOffre(offreDTO);
     }

@@ -42,7 +42,7 @@ public class PostuleServiceImpl implements PostuleService {
         Offre offre = offreRepository.findById(id).orElseThrow(OffreCreateException::new);
         Postule postule = Postule.builder()
                 .tel(requestPostuleOffre.getTel())
-                .nom_complet("requestPostuleOffre.getNom_complet()")
+                .nom_complet(requestPostuleOffre.getNom_complet())
                 .build();
         if(offre.getStatus().equals(StatusOffre.ACCEPTED)){
 

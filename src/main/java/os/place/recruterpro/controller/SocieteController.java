@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import os.place.recruterpro.dtos.SocieteDTO;
 import os.place.recruterpro.dtos.societe.RequestCreateSocieteDTO;
 import os.place.recruterpro.dtos.societe.RequestValidRegister;
@@ -17,6 +14,7 @@ import os.place.recruterpro.services.SocieteService;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin(value = "*")
 @RequestMapping("api/v1/societes")
 public class SocieteController {
     private SocieteService societeService;

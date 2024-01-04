@@ -9,6 +9,7 @@ import os.place.recruterpro.dtos.offre.request.RequestPostuleOffre;
 import os.place.recruterpro.services.PostuleService;
 
 @RestController
+@CrossOrigin(value = "*")
 @RequestMapping("api/v1/postule")
 public class PostuleController {
     private PostuleService postuleService;
@@ -20,14 +21,14 @@ public class PostuleController {
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> postuleOffre(   @RequestParam("offreId") Long offreId,
                                                   @RequestParam("nom_complet") String nomComplet,
-//                                                  @RequestParam("tel") int tel,
+                                                  @RequestParam("tel") int tel,
                                                   @RequestParam("cv") MultipartFile cv,
                                                   @RequestParam("motivation") MultipartFile motivation){
         RequestPostuleOffre requestPostuleOffre = RequestPostuleOffre.builder().offreId(offreId)
                 .cv(cv)
                 .motivation(motivation)
                 .nom_complet(nomComplet)
-                .tel(0000)
+                .tel(tel)
                 .build();
         this.postuleService.potuleOffre(requestPostuleOffre);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
